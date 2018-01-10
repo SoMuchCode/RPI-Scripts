@@ -1,23 +1,23 @@
 # reverse-ssh.sh
 Script to easily setup a reverse-ssh connection.
 
-#Server Setup (listener)
-This computer can be your server, or a publicly accessable server
-If you ssh into the server and run the "./reverse_ssh.ssh -s ..." command
-you will then be connected to the remote box.
-On my server I will set up the handler with
-	./reverse_ssh.ssh -s <my servers external ip> <the port I want to use> <remote box user>
-	./reverse-ssh.sh -s 192.168.1.9 33333 root
-
-#Remote Box
+## Remote Box
 You will want this to run all the time and restart at reboot, maybe use crontab
 The syntax works like this.
 	./reverse_ssh.sh -c <ip of handler> <port of handler> <reconnect time in seconds> <server user>
 	./reverse-ssh.sh -c 192.168.1.9 33333 10 pi
+	
+## Server Setup (listener)
+This computer can be your server, or a publicly accessable server. If you ssh into the server and run the "./reverse-ssh.sh -s ..." command, you will then be connected to the remote box.
+On my server I will set up the handler with:
+	./reverse-ssh.sh -s <my servers external ip> <the port I want to use> <remote box user>
+	./reverse-ssh.sh -s 192.168.1.9 33333 root
 
+## Notes
 The default server user name is: pi
 The default remote box user name is: root
 
+## Example
 In my example, the server (listener) is at 192.168.1.9, 
 but it could be any address, like: http://yourserver.com
 
@@ -37,6 +37,7 @@ and execute this.)
 The first time we connect, ssh-copy-id pi@192.168.1.9
 is run from the remote box to exchange the key.
 
+# Enable Autologin
 If we want to autologin we can do the opposite from the server
 once we are connected, copy the server's public key to 
 ~/.ssh/authorized_keys on the remote box.
