@@ -1,5 +1,5 @@
 # hostap
-Scripts to quickly confiure an AP on the RPI 3 or Zero W running Raspbian or Kali Rolling using hostapd and dnsmasq.
+Scripts to quickly configure an AP on the RPI 3 or Zero W running Raspbian or Kali Rolling using hostapd and dnsmasq.
 
 ## make-ap.sh
 An interactive shell script that will create the appropriate config files.
