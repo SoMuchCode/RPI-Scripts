@@ -9,12 +9,12 @@ An interactive shell script that will create the appropriate config files.
 ## startap.sh
 Script to start your custom AP.
 
-`./startap.sh`
+`sudo ./startap.sh`
 
 ## startap-open.sh
 Script to start an AP that has no password.
 
-`./startap-open.sh`
+`sudo ./startap-open.sh`
 
 ## Autostart
 Edit your `rc.local` file and add the following directly above `exit 0`.
