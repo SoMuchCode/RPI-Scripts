@@ -13,8 +13,11 @@ if [ "$appasswrd" == "" ]; then
 else
         tempvar=$( wpa_passphrase $apname $appasswrd )
 fi
-echo "New AP Channel?"
+echo "New AP Channel (default: 1)?"
 read newchan
+if [ "$newchan" == "" ]; then
+        newchan=1
+fi
 echo "New AP interface (default: wlan0)?"
 read newint
 if [ "$newint" == "" ]; then
