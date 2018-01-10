@@ -13,9 +13,7 @@
 #
 # To autostart this:
 # nano /etc/rc.local
-#change to bash interpreter
-#!/bin/bash
-# /bin/bash /home/pi/scripts/hostap/startap.sh > /dev/null 2>&1 &
+# /bin/bash /home/pi/RPI-Scripts/hostap/startap.sh > /dev/null 2>&1 &
 #
 
 if [ "$EUID" -ne 0 ]
@@ -24,7 +22,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 # Change this for your system!!!
-script_directory=/home/pi/scripts/hostap
+script_directory=/home/pi/RPI-Scripts/hostap
 
 myarch=$( arch )
 date > $script_directory/ap-started.txt
