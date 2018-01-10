@@ -5,7 +5,7 @@
 echo "Make AP"
 echo "New AP Name (SSID)?"
 read apname
-echo "New AP Password?"
+echo "New AP Password (Enter for none)?"
 read appasswrd
 if [ "$appasswrd" == "" ]; then
         echo "Open Wifi - No Password"
