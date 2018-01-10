@@ -17,6 +17,6 @@ Script to start an AP that has no password.
 `sudo ./startap-open.sh`
 
 ## Autostart
-Edit your `rc.local` file and add the following directly above `exit 0`.
+Edit your `/etc/rc.local` file and add the following directly above `exit 0`.
 
 `/bin/bash /home/pi/RPI-Scripts/hostap/startap.sh > /dev/null 2>&1 &`
