@@ -3,6 +3,7 @@
 # # Modified by SoMuchCode/YetAnotherCoder
 # https://github.com/SoMuchCode
 # Forked from: pry0cc/reverse-ssh.sh https://gist.github.com/pry0cc
+# Requires: netcat
 
 # Server Setup (listener)
 # This computer can be your server, or a publicly accessable server
@@ -25,30 +26,48 @@
 # And the remote box is logged into the user: root
 #
 # Therefore, on the remote box we run:
-# ./reverse-ssh.sh -c 192.168.1.9 33332 10 pi
+# ./reverse-ssh.sh -c 192.168.1.9 33333 10 pi
 #
-# And later, at your leisure, run this on the server
+# Run this on the server
 # (again, you can SSH into the server from a third box
 # and execute this.)
-# ./reverse-ssh.sh -s 192.168.1.9 33332 root
+# ./reverse-ssh.sh -s 192.168.1.9 33333 root
 
 # The first time we connect, ssh-copy-id pi@192.168.1.9
 # is run from the remote box to exchange the key.
+# You will also need to accept the server's key on the 
+# remote box, so you should probably connect these before
+# you deploy them...
 
 # If we want to autologin we can do the opposite from the server
-# once we are connected, copy the server's public key to 
-# ~/.ssh/authorized_keys on the remote box.
+# once we are connected, copy the server's public key (id_rsa.pub) 
+# to: ~/.ssh/authorized_keys on the remote box.
 # nano ~/.ssh/authorized_keys
 # and paste in your server's public key.
 
-mode=$1
-local_ip=$2
-local_port=$3
 # user name on server / listener
 user=pi
 # user name on remote box
 remoteuser=root
 
+function display_help {
+	echo "reverse-ssh.sh, A script to easily setup a reverse-ssh connection. It can function as either a host or a client to facilitate this connection."
+	echo "USAGE: reverse-ssh.sh -s <server external ip> <port> <remote box user>"
+	echo "reverse_ssh.sh -c <ip> <port> <reconnect time in seconds> <server user>"
+	exit
+}
+
+if ! [ $1 ] || ! [ $2 ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+	display_help
+fi
+
+mode=$1
+local_ip=$2
+local_port=33333
+
+if [ $3 ]; then
+	local_port=$3
+fi
 
 if [ $mode == "-s" ]; then
 	if [ $4 ]; then
@@ -56,6 +75,11 @@ if [ $mode == "-s" ]; then
 		remoteuser=$4
 	fi
 else
+	if [ $4 ]; then
+		reconnect_time=$4
+	else
+		reconnect_time=10
+	fi
 	if [ $5 ]; then
 		user=$5
 		remoteuser=$5
@@ -77,7 +101,6 @@ if [ $mode == "-s" ]
                 ssh -p $local_port $remoteuser@localhost
 elif [ $mode == "-c" ]
         then
-        reconnect_time=$4
         if [ ! -f ~/.ssh/id_rsa.pub ]
                 then
                 echo "No SSH keypair found... Generating one."
