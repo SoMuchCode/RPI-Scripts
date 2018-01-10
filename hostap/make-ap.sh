@@ -2,7 +2,6 @@
 # make-ap.sh
 # By SoMuchCode/YetAnotherCoder
 
-cdir=( pwd )
 echo "Make AP"
 echo "New AP Name (SSID)?"
 read apname
