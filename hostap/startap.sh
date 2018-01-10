@@ -13,7 +13,7 @@
 #
 # To autostart this:
 # nano /etc/rc.local
-# /bin/bash /home/pi/RPI-Scripts/hostap/startap.sh > /dev/null 2>&1 &
+# /bin/bash /<your home directory>/RPI-Scripts/hostap/startap-open.sh > /dev/null 2>&1 &
 #
 
 if [ "$EUID" -ne 0 ]
@@ -44,5 +44,15 @@ if [ "$myarch" == "armv61" ]; then
 	hostapd $script_directory/hostapd-PiZeroKali.conf &
 else
 	hostapd $script_directory/hostapd-RPI3Kali.conf &
+fi
+if [ "$1" == "--forward-eth0" ] || [ "$1" == "-fe" ] ; then
+	sysctl -w net.ipv4.ip_forward=1
+	iptables -P FORWARD ACCEPT
+	iptables --table nat -A POSTROUTING -o eth0 -j MASQUERADE
+fi
+if [ "$1" == "--forward-wlan1" ] || [ "$1" == "-fw" ] ; then
+	sysctl -w net.ipv4.ip_forward=1
+	iptables -P FORWARD ACCEPT
+	iptables --table nat -A POSTROUTING -o wlan1 -j MASQUERADE
 fi
 exit 0
