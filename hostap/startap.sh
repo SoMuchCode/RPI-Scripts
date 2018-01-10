@@ -41,9 +41,9 @@ sleep 1
 dnsmasq -C $script_directory/dnsmasq.conf -d &
 sleep 1
 if [ "$myarch" == "armv61" ]; then
-	hostapd $script_directory/hostapd-PiZeroKali.conf &
+	hostapd $script_directory/hostapd-PiZero.conf &
 else
-	hostapd $script_directory/hostapd-RPI3Kali.conf &
+	hostapd $script_directory/hostapd-RPI3.conf &
 fi
 if [ "$1" == "--forward-eth0" ] || [ "$1" == "-fe" ] ; then
 	sysctl -w net.ipv4.ip_forward=1
