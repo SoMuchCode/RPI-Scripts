@@ -1,0 +1,91 @@
+#!/bin/bash
+# startmon: a program to put your WiFi card into monitor mode.
+# it automatically uses macchanger to change the MAC for your protection.
+# By SoMuchCode/YetAnotherCoder
+# https://github.com/SoMuchCode
+# Requires:	airmon-ng, iwconfig, iw, ifconfig, macchanger
+
+if [ "$EUID" -ne 0 ]
+  then echo -e "\e[00;35m"Please run as root"\e[00m"  
+  exit
+fi
+interface=wlan0
+
+if [ "$1" == "--help" ]; then
+	echo "startmon, a program to put your card into monitor mode, it automatically uses macchanger to change the MAC for your protection."
+	echo "Usage: $0"
+	echo "Defaults to: $interface, or provide an interface"
+	echo "Example: startmon wlan0"
+	exit
+fi
+
+if [ $1 ]; then
+	interface=$1
+fi
+
+if (iwconfig "${interface}"mon | grep Monitor); then 
+	## already in monitor mode...
+	echo "Interface is already in monitor mode, try: stopmon ${interface}"
+	exit	
+elif (iwconfig mon"${interface: -1}" | grep Monitor); then 
+	## already in monitor mode...
+	echo "Interface is already in monitor mode, try: stopmon ${interface}"
+	exit	
+fi
+
+echo "Running: airmon-ng check kill"
+airmon-ng check kill
+#echo "Killing dhclient"
+#killall dhclient
+echo "Bringing down ${interface}"
+ifconfig ${interface} down
+echo "Changing settings"
+#iwconfig ${interface} channel 1       # 2.4GHz
+#iwconfig ${interface} channel 140     # 5 GHz
+#iw reg set GY
+iw reg set BO
+iwconfig ${interface} txpower 33 || iw ${interface} set txpower fixed 3000
+# Spoof VendorID
+/usr/bin/macchanger --mac=00:03:7f:c0:17:11 ${interface}
+sleep 1
+# Spoof the mac address
+/usr/bin/macchanger -e ${interface}
+echo "Creating monitor"
+
+# Raspberry Pi 3 Nexmon style monitor mode
+#ispi=$( lsmod | grep brcmfmac ) > /dev/null
+ispie=$( readlink /sys/class/net/${interface}/device/driver | grep brcmfmac )
+if ( cat /proc/device-tree/model | grep "Raspberry" ); then
+	if [ ispie ]; then
+		echo "Bringing up ${interface}mon"
+		iw dev ${interface} interface add ${interface}mon type monitor
+		sleep 1
+		# Make the monitor and wlan (spoofed) MAC match each other
+		newmac=$( cat /sys/class/net/${interface}/address )
+		/usr/bin/macchanger ${interface}mon --mac=$newmac
+		exit 0
+	fi
+fi
+
+
+if (iwconfig ${interface} | grep Monitor); then 
+	## already in monitor mode...
+	echo "Interface is already in monitor mode, try: stopmon ${interface}"
+else
+	# if (lsusb | grep a811) || (lsusb | grep a812) || (lsusb | grep a814); then
+		# iwconfig ${interface} mode monitor || airmon-ng start ${interface} || iw dev ${interface} interface add ${interface}mon type monitor
+	# elif (lsusb | grep 8811) || (lsusb | grep 8812) || (lsusb | grep 8814); then
+		# iwconfig ${interface} mode monitor || airmon-ng start ${interface} || iw dev ${interface} interface add ${interface}mon type monitor
+	# else
+		airmon-ng start ${interface} || iwconfig ${interface} mode monitor
+		newmac=$( cat /sys/class/net/${interface}/address )
+		ifconfig "${interface}"mon down || ifconfig mon"${interface: -1}" down
+		/usr/bin/macchanger "${interface}"mon --mac=$newmac || /usr/bin/macchanger mon"${interface: -1}" --mac=$newmac
+		ifconfig "${interface}"mon up || ifconfig mon"${interface: -1}" up
+	# fi
+fi
+sleep 1
+echo "Bringing up ${interface}"
+ifconfig ${interface} up
+iwconfig
+exit 0

@@ -1,0 +1,76 @@
+#!/bin/bash
+# stopmon: a program to take your WiFi card out of monitor mode.
+# It also restores your original MAC address.
+# By SoMuchCode/YetAnotherCoder
+# https://github.com/SoMuchCode
+# Requires:	airmon-ng, iwconfig, iw, ifconfig, macchanger
+
+if [ "$EUID" -ne 0 ]
+  then echo -e "\e[00;35m"Please run as root"\e[00m"  
+  exit
+fi
+interface=mon0
+
+if [ "$1" == "--help" ]; then
+	echo "stopmon, a program to take your card out of monitor mode; it also restores your original MAC address."
+	echo "if the interface is named wlanX then it is changed to managed mode, otherwise the interface will probably be deleted."
+	echo "Usage: $0"
+	echo "or provide an interface:"
+	echo "Example: stopmon wlan0		(will set mode to managed)"
+	echo "Example: stopmon mon0			(this interface will be deleted)"
+	echo "Example: stopmon wlan1mon		(this interface will be deleted)"
+	exit
+fi
+
+if [ $1 ]; then
+	interface=$1
+fi
+
+# Try the various monitor names starting with whatever
+# the user supplied, if nothing supplied, defaults to mon0.
+number=( "${interface//[^0-9]/}" )
+tempvar=$( iwconfig $interface ) > /dev/null 2>&1
+if ! [[ $tempvar ]]; then
+	# next best guess...
+	interface=wlan${number}mon
+	tempvar=$( iwconfig $interface ) > /dev/null 2>&1
+	if ! [[ $tempvar ]]; then
+	# next best guess...
+	interface=mon.wlan${number}
+	tempvar=$( iwconfig $interface ) > /dev/null 2>&1
+		if ! [[ $tempvar ]]; then
+		interface=wlan${number}
+		tempvar=$( iwconfig $interface ) > /dev/null 2>&1
+			if ! [[ $tempvar ]]; then
+				# I give up
+				echo "Interface not found, exiting..."
+				exit
+			fi
+		fi
+	fi
+fi
+
+if [[ ${interface} == "wlan"? ]]; then
+	echo "Bringing down ${interface}"
+	ifconfig ${interface} down
+	sleep 1
+	echo "Changing ${interface} mode to: Managed"
+	iwconfig ${interface} mode managed
+	sleep 1
+	echo "Restoring MAC address"
+	/usr/bin/macchanger -p ${interface}
+	sleep 1
+	echo "Bringing up ${interface}"
+	ifconfig ${interface} up
+else
+	echo "Bringing down ${interface}"
+	ifconfig ${interface} down
+	ifconfig wlan${number} down
+	sleep 1
+	echo "Removing ${interface}"
+	iw dev ${interface} del || airmon-ng stop ${interface}
+	/usr/bin/macchanger -p wlan${number}
+	ifconfig wlan${number} up
+fi
+
+exit 0
