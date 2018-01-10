@@ -44,7 +44,7 @@
 # once we are connected, copy the server's public key to 
 # ~/.ssh/authorized_keys on the remote box.
 # nano ~/.ssh/authorized_keys
-# and paste your server's public key.
+# and paste in your server's public key.
 
 mode=$1
 local_ip=$2
