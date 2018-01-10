@@ -8,11 +8,12 @@ An interactive shell script that will create the appropriate config files.
 	
 ## startap.sh
 Script to start your custom AP.
-If you want to automatically start forwarding, start it with `-fe` or `--forward-eth0` for the ethernet connection, `-fw` or `--forward-wlan1` for wireless 1 forwarding.
+If you want to automatically start forwarding, start it with `-fe` or `--forward-eth0` for the ethernet connection, `-fw` or `--forward-wlan1` for wireless (wlan1) forwarding.
 `sudo ./startap.sh`
 
 ## startap-open.sh
 Script to start an AP that has no password.
+If you want to automatically start forwarding, start it with `-fe` or `--forward-eth0` for the ethernet connection, `-fw` or `--forward-wlan1` for wireless (wlan1) forwarding.
 
 `sudo ./startap-open.sh`
 
