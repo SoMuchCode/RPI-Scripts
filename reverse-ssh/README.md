@@ -50,13 +50,13 @@ This account will _only_ be used for Reverse-SSH connections
     ssh-keygen -t rsa -b 4096
     exit
 
-Now, on the exfiltration box...
+Now, on the exfiltration box...  
     `scp ~/.ssh/id_rsa.pub testuser@192.168.111.9:.ssh/authorized_keys2`
 
-On the server, where I am actually logged in as the user "Pi", run:
+On the server, where I am actually logged in as the user "Pi", run:  
     `./reverse-ssh.sh -s 192.168.111.9 33330 root testuser`
 
-on the remote box, run:
+on the remote box, run:  
     `./reverse-ssh.sh -c 192.168.111.9 33330 10 testuser`
 
 
