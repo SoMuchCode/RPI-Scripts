@@ -10,8 +10,8 @@
 # If you ssh into the server and run the "./reverse_ssh.ssh -s ..." command
 # you will then be connected to the remote box.
 # On my server I will set up the handler with
-# ./reverse_ssh.ssh -s <my servers external ip> <port> <remote box user>
-# ./reverse-ssh.sh -s 192.168.1.9 33333 root
+# ./reverse_ssh.ssh -s <my servers external ip> <port> <remote box user> <server user>
+# ./reverse-ssh.sh -s 192.168.1.9 33333 root pi
 
 # Remote Box
 # You will want this to run all the time and restart at reboot, maybe use crontab
@@ -71,8 +71,10 @@ fi
 
 if [ $mode == "-s" ]; then
 	if [ $4 ]; then
-		user=$4
 		remoteuser=$4
+	fi
+	if [ $5 ]; then
+		user=$5
 	fi
 else
 	if [ $4 ]; then
@@ -82,7 +84,6 @@ else
 	fi
 	if [ $5 ]; then
 		user=$5
-		remoteuser=$5
 	fi
 fi
 
