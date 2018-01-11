@@ -31,7 +31,7 @@
 # Run this on the server
 # (again, you can SSH into the server from a third box
 # and execute this.)
-# ./reverse-ssh.sh -s 192.168.1.9 33333 root
+# ./reverse-ssh.sh -s 192.168.1.9 33333 root pi
 
 # The first time we connect, ssh-copy-id pi@192.168.1.9
 # is run from the remote box to exchange the key.
