@@ -15,21 +15,15 @@ On my server I will set up the handler with:
 `./reverse-ssh.sh -s <my servers external ip> <port> <remote box user> <server user>`
 
 ## Notes
-The default server user name is: pi
+Since the remote box will be able to login to your server via ssh with no password, be sure and create a user with no privileges (rbash) on the server for this task.
 
-The default remote box user name is: root
+## Usage Example
+In my example, the server (listener) is at 192.168.1.9, but it could be any address; for example: http://yourserver.com.
 
-Since the remote box will be able to login to your server via ssh with no password, be sure and create a user with no privileges on the server for this task.
-
-## Example
-In my example, the server (listener) is at 192.168.1.9, 
-but it could be any address; for example: http://yourserver.com.
-
-The server is logged in with the user: pi
-
+The server is logged in with the user: pi  
 The remote box is logged into the user: root
 
-Therefore, on the remote box we run:
+Therefore, on the remote box we run:  
 `./reverse-ssh.sh -c 192.168.1.9 33332 10 pi`
 
 And on the server:
@@ -37,8 +31,8 @@ And on the server:
 and execute this.)
 `./reverse-ssh.sh -s 192.168.1.9 33332 root pi`
 
-If the remote box has no SSH keys, they will be generated and `ssh-copy-id pi@192.168.1.9` will be run from the remote box to exchange the key.
-You can also run 
+If the remote box has no SSH keys, they will be generated and `ssh-copy-id pi@192.168.1.9` will be run from the remote box to exchange the key.  
+You could also run, `scp ~/.ssh/id_rsa.pub testuser@192.168.111.9:.ssh/authorized_keys2` from the remote box to add the key (I chose `authorized_keys2` because scp will overwrite the file if it exists.) 
 
 # Enable Autologin
 If we want to autologin we can do the opposite from the server; once we are connected, copy the server's public key from `~/.ssh/id_rsa.pub`, to `~/.ssh/authorized_keys` on the remote box.
