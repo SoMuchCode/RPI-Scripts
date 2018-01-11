@@ -14,7 +14,7 @@ Syntax:
 `./reverse-ssh.sh -s <my servers external ip> <port> <remote box user> <server user>`
 
 ## Notes
-Since the remote box will be able to login to your server via SSH with no password, be sure and create a user with no privileges (rbash) on the server for this task.
+Since the remote box will be able to login to your server via SSH with no password, be sure and create a user with no privileges ([rbash](http://man.he.net/man1/rbash)) on the server for this task.
 
 ## Usage Example
 In my example, the server (listener) is at 192.168.1.9, but it could be any valid address.
