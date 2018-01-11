@@ -51,7 +51,8 @@ This account will _only_ be used for Reverse-SSH connections
     exit
 
 Now, on the exfiltration box...  
-    `scp ~/.ssh/id_rsa.pub testuser@192.168.111.9:.ssh/authorized_keys2`
+    `scp ~/.ssh/id_rsa.pub testuser@192.168.111.9:.ssh/authorized_keys2`  
+Remember, this command will overwrite the destination file if it exists!
 
 On the server, where I am actually logged in as the user "Pi", run:  
     `./reverse-ssh.sh -s 192.168.111.9 33330 root testuser`
