@@ -29,7 +29,7 @@ And on the server: (again, you can SSH into the server from a third box and exec
 `./reverse-ssh.sh -s 192.168.1.9 33332 root pi`
 
 If the remote box has no SSH keys, they will be generated and `ssh-copy-id pi@192.168.1.9` will be run from the remote box to exchange the key.  
-You could also run, `scp ~/.ssh/id_rsa.pub testuser@192.168.111.9:.ssh/authorized_keys2` from the remote box to add the key (I chose `authorized_keys2` because scp will overwrite the `authorized_keys` file if it exists.) 
+You could also run, `scp ~/.ssh/id_rsa.pub testuser@192.168.1.9:.ssh/authorized_keys2` from the remote box to add the key (I chose `authorized_keys2` because scp will overwrite the `authorized_keys` file if it exists.) 
 
 ## Enable Autologin
 If we want to autologin we can do the opposite from the server; once we are connected, copy the server's public key from `~/.ssh/id_rsa.pub`, to `~/.ssh/authorized_keys` on the remote box.  
@@ -51,14 +51,14 @@ This account will _only_ be used for Reverse-SSH connections
     exit
 
 Now, on the exfiltration box...  
-    `scp ~/.ssh/id_rsa.pub testuser@192.168.111.9:.ssh/authorized_keys2`  
+    `scp ~/.ssh/id_rsa.pub testuser@192.168.1.9:.ssh/authorized_keys2`  
 Remember, this command will overwrite the destination file if it exists!
 
-On the server, where I am actually logged in as the user "Pi", run:  
-    `./reverse-ssh.sh -s 192.168.111.9 33330 root testuser`
+On the server, where I am actually logged in as the user, 'Pi':  
+    `./reverse-ssh.sh -s 192.168.1.9 33330 root testuser`
 
 on the remote box, run:  
-    `./reverse-ssh.sh -c 192.168.111.9 33330 10 testuser`
+    `./reverse-ssh.sh -c 192.168.1.9 33330 10 testuser`
 
 
 ***
