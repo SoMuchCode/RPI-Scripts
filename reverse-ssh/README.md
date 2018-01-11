@@ -8,12 +8,12 @@ Syntax:
 `./reverse_ssh.sh -c <ip of handler> <port> <reconnect time in seconds> <server user>`
 	
 ## Server Setup (listener)
-This computer can be your server, or a publicly accessable server. If you ssh into the server and run the "./reverse-ssh.sh -s ..." command, you will then be connected to the remote box.  
-On my server I will set up the handler with:  
+This computer can be your server, or a publicly accessable server. If you SSH into the server and run the "./reverse-ssh.sh -s ..." command, you will then be connected to the remote box.  
+Syntax: 
 `./reverse-ssh.sh -s <my servers external ip> <port> <remote box user> <server user>`
 
 ## Notes
-Since the remote box will be able to login to your server via ssh with no password, be sure and create a user with no privileges (rbash) on the server for this task.
+Since the remote box will be able to login to your server via SSH with no password, be sure and create a user with no privileges (rbash) on the server for this task.
 
 ## Usage Example
 In my example, the server (listener) is at 192.168.1.9, but it could be any valid address.
