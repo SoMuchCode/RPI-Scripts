@@ -36,7 +36,7 @@ If we want to autologin we can do the opposite from the server; once we are conn
 
 ## Create A Restricted User on Server
 
-On the server, create a restricted user  
+On the server, create a restricted user.  
 This account will _only_ be used for Reverse-SSH connections
 
     sudo ln -s /bin/bash /bin/rbash
@@ -51,13 +51,13 @@ This account will _only_ be used for Reverse-SSH connections
     exit
 
 Now, on the exfiltration box...
-    scp ~/.ssh/id_rsa.pub testuser@192.168.111.9:.ssh/authorized_keys2
+    `scp ~/.ssh/id_rsa.pub testuser@192.168.111.9:.ssh/authorized_keys2`
 
 On the server, where I am actually logged in as the user "Pi", run:
-    ./reverse-ssh.sh -s 192.168.111.9 33330 root testuser
+    `./reverse-ssh.sh -s 192.168.111.9 33330 root testuser`
 
 on the remote box, run:
-    ./reverse-ssh.sh -c 192.168.111.9 33330 10 testuser
+    `./reverse-ssh.sh -c 192.168.111.9 33330 10 testuser`
 
 
 ***
