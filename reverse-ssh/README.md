@@ -50,14 +50,15 @@ This account will _only_ be used for Reverse-SSH connections
     ssh-keygen -t rsa -b 4096
     exit
 
-Now, on the exfiltration box...  
+### To share the SSH key, on the exfiltration box, run:  
     `scp ~/.ssh/id_rsa.pub testuser@192.168.1.9:.ssh/authorized_keys2`  
 Remember, this command will overwrite the destination file if it exists!
 
+### Create reverse-SSH connection using restricted user account
 On the server, where I am actually logged in as the user, 'Pi':  
     `./reverse-ssh.sh -s 192.168.1.9 33330 root testuser`
 
-on the remote box, run:  
+On the remote box:  
     `./reverse-ssh.sh -c 192.168.1.9 33330 10 testuser`
 
 
