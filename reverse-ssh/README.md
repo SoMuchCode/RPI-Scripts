@@ -8,8 +8,9 @@ Syntax:
 `./reverse_ssh.sh -c <ip of handler> <port> <reconnect time in seconds> <server user>`
 	
 ## Server Setup (listener)
-This computer can be your server, or a publicly accessable server. If you SSH into the server and run the "./reverse-ssh.sh -s ..." command, you will then be connected to the remote box.  
-Syntax: 
+This computer can be your server, or a publicly accessable server. If you SSH into the server and run the "./reverse-ssh.sh -s ..." command, you will then be connected to the remote box.
+
+Syntax:  
 `./reverse-ssh.sh -s <my servers external ip> <port> <remote box user> <server user>`
 
 ## Notes
@@ -28,12 +29,11 @@ And on the server: (again, you can SSH into the server from a third box and exec
 `./reverse-ssh.sh -s 192.168.1.9 33332 root pi`
 
 If the remote box has no SSH keys, they will be generated and `ssh-copy-id pi@192.168.1.9` will be run from the remote box to exchange the key.  
-You could also run, `scp ~/.ssh/id_rsa.pub testuser@192.168.111.9:.ssh/authorized_keys2` from the remote box to add the key (I chose `authorized_keys2` because scp will overwrite the file if it exists.) 
+You could also run, `scp ~/.ssh/id_rsa.pub testuser@192.168.111.9:.ssh/authorized_keys2` from the remote box to add the key (I chose `authorized_keys2` because scp will overwrite the `authorized_keys` file if it exists.) 
 
 # Enable Autologin
 If we want to autologin we can do the opposite from the server; once we are connected, copy the server's public key from `~/.ssh/id_rsa.pub`, to `~/.ssh/authorized_keys` on the remote box.  
-`nano ~/.ssh/authorized_keys`  
-and paste in your server's public key.
+
 
 ***
 Forked from: pry0cc/reverse-ssh.sh https://gist.github.com/pry0cc
