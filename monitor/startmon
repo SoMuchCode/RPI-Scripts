@@ -72,17 +72,12 @@ if (iwconfig ${interface} | grep Monitor); then
 	## already in monitor mode...
 	echo "Interface is already in monitor mode, try: stopmon ${interface}"
 else
-	# if (lsusb | grep a811) || (lsusb | grep a812) || (lsusb | grep a814); then
-		# iwconfig ${interface} mode monitor || airmon-ng start ${interface} || iw dev ${interface} interface add ${interface}mon type monitor
-	# elif (lsusb | grep 8811) || (lsusb | grep 8812) || (lsusb | grep 8814); then
-		# iwconfig ${interface} mode monitor || airmon-ng start ${interface} || iw dev ${interface} interface add ${interface}mon type monitor
-	# else
-		airmon-ng start ${interface} || iwconfig ${interface} mode monitor
-		newmac=$( cat /sys/class/net/${interface}/address )
-		ifconfig "${interface}"mon down || ifconfig mon"${interface: -1}" down
-		/usr/bin/macchanger "${interface}"mon --mac=$newmac || /usr/bin/macchanger mon"${interface: -1}" --mac=$newmac
-		ifconfig "${interface}"mon up || ifconfig mon"${interface: -1}" up
-	# fi
+	# Start monitor mode
+	airmon-ng start ${interface} || iwconfig ${interface} mode monitor
+	newmac=$( cat /sys/class/net/${interface}/address )
+	ifconfig "${interface}"mon down || ifconfig mon"${interface: -1}" down
+	/usr/bin/macchanger "${interface}"mon --mac=$newmac || /usr/bin/macchanger mon"${interface: -1}" --mac=$newmac
+	ifconfig "${interface}"mon up || ifconfig mon"${interface: -1}" up
 fi
 sleep 1
 echo "Bringing up ${interface}"

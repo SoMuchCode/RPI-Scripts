@@ -31,7 +31,7 @@
 # Run this on the server
 # (again, you can SSH into the server from a third box and execute this.)
 # ./reverse-ssh.sh -s 192.168.1.45 33333 root pi
-
+#
 # If the remote box has no SSH keys, they will be generated and 
 # ssh-copy-id pi@192.168.1.45 will be run from the remote box to exchange the key.
 # You should probably connect these before you deploy them...

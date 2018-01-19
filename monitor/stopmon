@@ -27,7 +27,7 @@ if [ $1 ]; then
 fi
 
 # Try the various monitor names starting with whatever
-# the user supplied, if nothing supplied, defaults to mon0.
+# the user supplied, if nothing supplied, defaults to mon1.
 number=( "${interface//[^0-9]/}" )
 tempvar=$( iwconfig $interface ) > /dev/null 2>&1
 if ! [[ $tempvar ]]; then
@@ -35,16 +35,21 @@ if ! [[ $tempvar ]]; then
 	interface=wlan${number}mon
 	tempvar=$( iwconfig $interface ) > /dev/null 2>&1
 	if ! [[ $tempvar ]]; then
-	# next best guess...
-	interface=mon.wlan${number}
-	tempvar=$( iwconfig $interface ) > /dev/null 2>&1
-		if ! [[ $tempvar ]]; then
-		interface=wlan${number}
+		# next best guess...
+		interface=mon${number}
 		tempvar=$( iwconfig $interface ) > /dev/null 2>&1
+		if ! [[ $tempvar ]]; then
+			# next best guess...
+			interface=mon.wlan${number}
+			tempvar=$( iwconfig $interface ) > /dev/null 2>&1
 			if ! [[ $tempvar ]]; then
-				# I give up
-				echo "Interface not found, exiting..."
-				exit
+				interface=wlan${number}
+				tempvar=$( iwconfig $interface | grep Monitor ) > /dev/null 2>&1
+				if ! [[ $tempvar ]]; then
+					# I give up
+					echo "Interface not found, exiting..."
+					exit 1
+				fi
 			fi
 		fi
 	fi

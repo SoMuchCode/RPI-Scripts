@@ -1,0 +1,51 @@
+#!/bin/bash
+# checkmon
+# By SoMuchCode/YetAnotherCoder
+# https://github.com/SoMuchCode
+# Requires:	airmon-ng, iwconfig, iw, ifconfig
+
+if [ "$EUID" -ne 0 ]
+  then echo -e "\e[00;35m"Please run as root"\e[00m"  
+  exit
+fi
+interface=mon0
+
+if [ "$1" == "--help" ]; then
+	echo "checkmon"
+	exit
+fi
+
+if [ $1 ]; then
+	interface=$1
+fi
+
+# Try the various monitor names starting with whatever
+# the user supplied, if nothing supplied, defaults to mon1.
+number=( "${interface//[^0-9]/}" )
+tempvar=$( iwconfig $interface ) > /dev/null 2>&1
+if ! [[ $tempvar ]]; then
+	# next best guess...
+	interface=wlan${number}mon
+	tempvar=$( iwconfig $interface ) > /dev/null 2>&1
+	if ! [[ $tempvar ]]; then
+		# next best guess...
+		interface=mon${number}
+		tempvar=$( iwconfig $interface ) > /dev/null 2>&1
+		if ! [[ $tempvar ]]; then
+			# next best guess...
+			interface=mon.wlan${number}
+			tempvar=$( iwconfig $interface ) > /dev/null 2>&1
+			if ! [[ $tempvar ]]; then
+				interface=wlan${number}
+				tempvar=$( iwconfig $interface | grep Monitor ) > /dev/null 2>&1
+				if ! [[ $tempvar ]]; then
+					# I give up
+					echo "Monitor interface is down."
+					exit 0
+				fi
+			fi
+		fi
+	fi
+fi
+echo "Monitor ${interface} is up."
+exit 0
