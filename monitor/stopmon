@@ -43,6 +43,7 @@ if ! [[ $tempvar ]]; then
 			interface=mon.wlan${number}
 			tempvar=$( iwconfig $interface ) > /dev/null 2>&1
 			if ! [[ $tempvar ]]; then
+				# next best guess...
 				interface=wlan${number}
 				tempvar=$( iwconfig $interface | grep Monitor ) > /dev/null 2>&1
 				if ! [[ $tempvar ]]; then
